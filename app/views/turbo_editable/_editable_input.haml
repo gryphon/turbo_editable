@@ -1,0 +1,30 @@
+- if params[:editable]
+  - did = dom_id(model, "#{field}_frame")
+  = turbo_frame_tag did do
+    .editor-component
+      = yield
+      = editable_validation_errors model, field
+    .editor-options
+      %button{type: :submit, class: "btn btn-primary btn-sm"}
+        %i.bi.bi-check-lg
+      = link_to :back, class: "btn btn-danger btn-sm" do
+        %i.bi.bi-x-lg
+    :javascript
+      var e = document.querySelectorAll("##{did} input")[0]
+      if (e) {
+        e.focus();
+        e.select();
+        e.dataset.flatpickrOpenedValue = "true"
+      }
+      e = document.querySelectorAll("##{did} select")[0]
+      if (e) {
+        e.focus();
+      }
+      e = document.querySelectorAll("##{did} [data-controller='autocomplete']")[0]
+      if (e) {
+        e.dataset.autocompleteOpenedValue = "true"
+      }
+- else
+  - visible = local_assigns[:always_visible] || !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
+  %div{class: visible ? "" : "d-none"}
+    = yield

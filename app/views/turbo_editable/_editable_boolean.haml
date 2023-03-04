@@ -1,0 +1,18 @@
+- if !local_assigns[:disabled] && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
+  - frame_id = dom_id(model, "#{field}_frame")
+  = form_with model: model, url: url, class: "editable", data: { turbo_frame: frame_id } do |f|
+    = hidden_field_tag :editable, true  
+    = turbo_frame_tag frame_id, class: "editor" do
+      %span.value-container
+        %span.value= boolean_icon model.send(field)
+        - if !model.send(field)
+          %button{type: :submit, class: "btn btn-sm toggle-editor"}
+            = f.hidden_field field, value: true
+            %i.bi.bi-check-lg.text-success
+        - else
+          %button{type: :submit, class: "btn btn-sm toggle-editor"}
+            = f.hidden_field field, value: false
+            %i.bi.bi-x-lg.text-danger
+- else
+  = turbo_frame_tag frame_id, class: "editor" do
+    = boolean_icon model.send(field)
