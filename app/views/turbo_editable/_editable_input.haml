@@ -7,7 +7,7 @@
     .editor-options
       %button{type: :submit, class: "btn btn-primary btn-sm"}
         %i.bi.bi-check-lg
-      = link_to :back, class: "btn btn-danger btn-sm" do
+      = link_to local_assigns[:cancel_url], class: "btn btn-danger btn-sm" do
         %i.bi.bi-x-lg
     :javascript
       var e = document.querySelectorAll("##{did} input")[0]
@@ -25,6 +25,6 @@
         e.dataset.autocompleteOpenedValue = "true"
       }
 - else
-  - visible = local_assigns[:always_visible] || !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
+  - visible = !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
   %div{class: visible ? "" : "d-none"}
     = yield

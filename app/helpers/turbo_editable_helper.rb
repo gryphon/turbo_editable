@@ -1,32 +1,36 @@
 module TurboEditableHelper
 
   def editable_input model, field, **params
-    params[:back_url] = model if params[:back_url].nil?
-    model = model.last if model.kind_of?(Array)
+    namespace = (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+
+    params[:cancel_url] = [namespace, model]
+
     render "turbo_editable/editable_input", model: model, field: field, **params do
       yield
     end
   end
 
   def editable model, field, **params
+    # params[:url] = root_path
+    namespace = (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
 
-    params[:url] = model if params[:url].nil?
-    params[:edit_url] = [params[:form_action].presence || :edit, model, editable: true].flatten if params[:edit_url].nil?
+    if params[:url].nil? && !namespace.nil?
+      params[:url] = [namespace, model]
+    end
 
-    model = model.last if model.kind_of?(Array)
+    params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true]
 
+    if params[:url].nil? && !namespace.nil?
+      params[:url] = [namespace, model]
+    end
+ 
     render "turbo_editable/editable", model: model, field: field, **params do
       yield
     end
   end
 
-  def editable_boolean model, field, **params
-
-    params[:url] = model if params[:url].nil?
-
-    model = model.last if model.kind_of?(Array)
-
-    render "turbo_editable/editable_boolean", model: model, field: field, **params do
+  def editable_boolean model, field
+    render "turbo_editable/editable_boolean", model: model, field: field do
       yield
     end
   end
