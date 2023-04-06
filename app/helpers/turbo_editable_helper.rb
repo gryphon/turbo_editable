@@ -1,7 +1,8 @@
 module TurboEditableHelper
 
   def editable_input model, field, **params
-    namespace = (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+
+    namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
 
     params[:cancel_url] = [namespace, model]
 
@@ -12,7 +13,8 @@ module TurboEditableHelper
 
   def editable model, field, **params
     # params[:url] = root_path
-    namespace = (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+    namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+    params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
 
     if params[:url].nil? && !namespace.nil?
       params[:url] = [namespace, model]
