@@ -31,8 +31,14 @@ module TurboEditableHelper
     end
   end
 
-  def editable_boolean model, field
-    render "turbo_editable/editable_boolean", model: model, field: field do
+  def editable_boolean model, field, **params
+    namespace = (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+    
+    if params[:url].nil? && !namespace.nil?
+      params[:url] = [namespace, model]
+    end
+
+    render "turbo_editable/editable_boolean", model: model, field: field, **params do
       yield
     end
   end

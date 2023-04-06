@@ -1,6 +1,6 @@
 - if !local_assigns[:disabled] && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
   - frame_id = dom_id(model, "#{field}_frame")
-  = form_with model: model, class: "editable", data: { turbo_frame: frame_id } do |f|
+  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_id } do |f|
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, class: "editor" do
       %span.value-container
