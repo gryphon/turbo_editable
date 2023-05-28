@@ -1,0 +1,144 @@
+.editable-only {
+  display: none;
+}
+
+.editable {
+  margin-top: -2px;
+  margin-left: -4px;
+  display: inline-block;
+
+  .empty-value {
+    background: #ffffc0;
+  }
+  .activate {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    padding: 0 2px;
+    visibility: hidden;
+  }
+  &:hover {
+    .activate {
+      visibility: visible;
+    }
+  }
+  .value-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    padding: 2px 5px 2px 5px;
+    .value {
+      //cursor: pointer;
+      overflow-wrap: break-word;
+      display: inline;
+    }
+    .toggle-editor {
+      visibility: hidden;
+      display: none;
+      box-sizing: border-box;
+      background-color: #ddd;
+      border-left: 1px solid #ddd;
+      bottom: 0;
+      height: auto;
+      margin: 0;
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      right: -1.6em;
+      top: 0;
+      width: 1.6em;
+      text-align: center;
+      color: black;
+      z-index: 2;
+      > * {
+        vertical-align: middle;
+        color: black;
+      }
+    }
+    .toggle-approve {
+      width: 8em;
+      right: -8em;
+      overflow: hidden;
+    }
+    &:hover {
+      box-shadow: 0 0 0 1px #ddd;
+      background: white;
+      z-index: 10000;
+      border-radius: 2px 0px 0px 2px;
+      .toggle-editor {
+        visibility: visible;
+        display: inline;
+        box-shadow: 0 0 0 1px #ddd;
+        border-radius: 2px;
+        border-radius: 0px 2px 2px 0;
+      }
+    }
+  }
+  .form-group {
+    margin: 0;
+  }
+  .form-control {
+    padding-right: 0;
+  }
+  .editor {
+    position: relative;
+    display: block;
+    .editor-options {
+      z-index: 1;
+      position: absolute;
+      background: white;
+      font-size: 13.6px;
+      left: 0;
+      top: 100%;
+      box-shadow: 0 3px 6px #bbb;
+      padding: 3px;
+      button, a {
+        padding: 4px 8px;
+      }
+    }
+  }
+}
+.editable-disabled {
+  .toggle-editor {
+    display: none !important;
+  }
+}
+
+h1 {
+  .editable {
+    vertical-align: top;
+    .form-control, .form-select {
+      font-size: 1.4rem;
+    }
+    .editor {
+      .editor-component {
+        margin: 0 10px;
+      }
+    }
+    .invalid-feedback {
+      font-size: 12px;
+    }
+    .toggle-editor {
+      right: -1em !important;
+      width: 1em !important;
+      i.fa {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+dd {
+  .editable {
+    width: 100%;
+  }
+}
+
+.editor-component {
+  .form-label, .form-text {
+    display: none;
+  }
+  .select {
+    margin-bottom: 0 !important;
+  }
+}

@@ -1,13 +1,20 @@
 - if !disabled && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
   - frame_id = dom_id(model, "#{field}_frame")
   - frame_to_reload_after_update = local_assigns[:frame_to_update].nil? ? frame_id : local_assigns[:frame_to_update]
-  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_to_reload_after_update, controller: "editable" } do 
+  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_to_reload_after_update, controller: "editable" } do |f|
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, class: "editor" do
-      %span.value-container{data: {action: "dblclick->editable#show"}}
+      %span.value-container{ondblclick: "this.querySelector('.pencil').click()"}
         %span.value= yield
-        = link_to local_assigns[:edit_url], class: "toggle-editor", data: {"editable-target": "pencil"} do
-          %i.bi.bi-pen
+        %span.toggle-editor
+          = link_to local_assigns[:edit_url], class: "pencil" do
+            %i.bi.bi-pen
+          - if local_assigns[:nullify]
+            - if !model.send(field).blank?
+              %button{type: :submit, class: "btn btn-sm toggle-editor"}
+                = f.hidden_field field, value: nil
+                %i.bi.bi-trash
+
 - else
   = turbo_frame_tag frame_id, class: "editor" do
     = yield

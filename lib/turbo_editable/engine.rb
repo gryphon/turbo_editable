@@ -1,14 +1,12 @@
-require 'rubygems'
-require 'rails'
-
 module TurboEditable
-  module Rails
-    class Engine < ::Rails::Engine
-      initializer 'turbo_editable.assets' do |app|
-        %w(stylesheets javascripts).each do |sub|
-          app.config.assets.paths << root.join('assets', sub).to_s
-        end
-      end
+  class Engine < ::Rails::Engine
+    isolate_namespace TurboEditable
+
+    config.generators do |g|
+      g.test_framework :rspec
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
     end
+
   end
 end

@@ -26,5 +26,5 @@
       }
 - else
   - visible = local_assigns[:always_visible] || !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
-  %div{class: visible ? "" : "d-none"}
+  - if visible
     = yield

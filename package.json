@@ -1,9 +1,0 @@
-{
-  "name": "turbo_editable",
-  "version": "1.2.0",
-  "description": "Turbo Editable",
-  "main": "app/javascript/controllers/editable_controller.js",
-  "repository": "https://github.com/lol/kek",
-  "author": "Grigory Dmitrenko",
-  "license": "MIT"
-}

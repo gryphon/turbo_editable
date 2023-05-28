@@ -1,7 +1,6 @@
-require 'rails'
+require "turbo_editable/version"
+require "turbo_editable/engine"
 
 module TurboEditable
-  module Rails
-    require 'turbo_editable/engine'
-  end
+  # Your code goes here...
 end

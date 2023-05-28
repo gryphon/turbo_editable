@@ -1,22 +1,22 @@
-$:.push File.expand_path("../lib", __FILE__)
-require "turbo_editable/version"
+require_relative "lib/turbo_editable/version"
 
-Gem::Specification.new do |s|
-  s.name        = "turbo_editable"
-  s.version     = TurboEditable::VERSION
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Grigory"]
-  s.email       = ["mail@grigor.io"]
-  s.homepage    = "http://github.com/gryphon/turbo_editable"
-  s.summary     = %q{In-place editor for Turbo}
-  s.description = %q{In-place editor for Turbo}
+Gem::Specification.new do |spec|
+  spec.name        = "turbo_editable"
+  spec.version     = TurboEditable::VERSION
+  spec.authors     = [""]
+  spec.email       = [""]
+  spec.homepage    = "http://github.com/gryphon/turbo_editable"
+  spec.summary     = "In-place editor for Turbo"
+  spec.description = "In-place editor for Turbo"
   
-  #s.files         = `git ls-files`.split("\n")
-  #s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.files = Dir['assets/**/*']
-  
-  s.require_paths = ["lib"]
+  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
+  # to allow pushing to a single host or delete this section to allow pushing to any host.
 
-  s.add_dependency "rails", "~> 7.0"
+  spec.metadata["homepage_uri"] = spec.homepage
 
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  end
+
+  spec.add_dependency "rails", ">= 7.0"
 end
