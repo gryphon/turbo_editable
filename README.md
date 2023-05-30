@@ -53,6 +53,7 @@ Options:
 * ```form_action``` - allows to override form action name. ```edit``` by default
 * ```url``` - if you have custom update method URL pass it here
 * ```edit_url``` - if you have custom edit url pass it here
+* ```nullify``` - set true to include additional one-click "remove" button
 
 ## Cancancan integration
 

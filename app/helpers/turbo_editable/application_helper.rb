@@ -40,7 +40,10 @@ module TurboEditable
 
     # Automatically decides which editable to use
     def editable model, field, **params
-      if !model.class.columns.find{|f| f.name == field && f.type == "boolean"}.nil?
+
+      inst = model.kind_of?(Array) ? model.last : model
+
+      if !inst.class.columns.find{|f| f.name == field && f.type == "boolean"}.nil?
         return editable_boolean(model, field) { yield }
       end
       return editable_field(model, field, **params) { yield }
