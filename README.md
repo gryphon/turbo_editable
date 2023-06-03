@@ -4,7 +4,7 @@ In-place editor for your app
 
 ## Installation
 
-* Add helpers to your application controller: ```helper TurboEditable::Engine.helpers```
+* Add helpers to your application controller: ```helper TurboEditable::ApplicationHelper```
 * Add CSS: ```@import "turbo_editable/editable.css";```
 
 ## Usage
