@@ -17,6 +17,7 @@ module TurboEditable
 
     # Generic editable field. Suitable for any type
     def editable_field model, field, **params
+
       # params[:url] = root_path
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
@@ -43,15 +44,29 @@ module TurboEditable
 
       inst = model.kind_of?(Array) ? model.last : model
 
-      if !inst.class.columns.find{|f| f.name == field && f.type == "boolean"}.nil?
+      if !inst.class.columns.find{|f| f.name.to_s == field.to_s && f.type.to_s == "boolean"}.nil?
         return editable_boolean(model, field) { yield }
       end
       return editable_field(model, field, **params) { yield }
     end
 
     # Editable field for boolean values ("Switch")
-    def editable_boolean model, field
-      render "turbo_editable/editable_boolean", model: model, field: field do
+    def editable_boolean model, field, **params
+
+      namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+      params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
+
+      if params[:url].nil? && !namespace.nil?
+        params[:url] = [namespace, model].flatten
+      end
+
+      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
+
+      if params[:url].nil? && !namespace.nil?
+        params[:url] = [namespace, model]
+      end
+
+      render "turbo_editable/editable_boolean", model: model, field: field, **params do
         yield
       end
     end
