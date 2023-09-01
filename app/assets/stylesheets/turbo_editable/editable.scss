@@ -7,6 +7,12 @@
   margin-left: -4px;
   display: inline-block;
 
+  // a.pencil {
+  //   i {
+  //     vertical-align: middle;
+  //   }
+  // }
+
   .empty-value {
     background: #ffffc0;
   }
@@ -50,9 +56,8 @@
       text-align: center;
       color: black;
       z-index: 10002;
-      > * {
+      .pencil i {
         vertical-align: middle;
-        color: black;
       }
     }
     .toggle-approve {

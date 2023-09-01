@@ -4,7 +4,7 @@ In-place editor for your app
 
 ## Installation
 
-* Add helpers to your application controller: ```helper TurboEditable::ApplicationHelper```
+* Add helpers to your application controller: ```helper TurboEditable::Engine.helpers```
 * Add CSS: ```@import "turbo_editable/editable.css";```
 
 ## Usage
@@ -54,6 +54,7 @@ Options:
 * ```url``` - if you have custom update method URL pass it here
 * ```edit_url``` - if you have custom edit url pass it here
 * ```nullify``` - set true to include additional one-click "remove" button
+* ```instant_edit``` - set true to start editing right after initialized
 
 ## Cancancan integration
 

@@ -6,9 +6,9 @@
       = editable_validation_errors model, field
     .editor-options
       %button{type: :submit, class: "btn btn-primary btn-sm"}
-        %i.bi.bi-check-lg
+        = editable_check_icon
       = link_to local_assigns[:cancel_url], class: "btn btn-danger btn-sm" do
-        %i.bi.bi-x-lg
+        = editable_x_icon
     :javascript
       var e = document.querySelectorAll("##{did} input")[0]
       if (e) {
