@@ -6,7 +6,8 @@
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, src: (local_assigns[:instant_edit] ? local_assigns[:edit_url] : nil), class: "editor" do
       %span.value-container{ondblclick: "this.querySelector('.pencil').click()"}
-        %span.value= yield
+        %span.value
+          = yield
         %span.toggle-editor
           = link_to local_assigns[:edit_url], class: "pencil" do
             = editable_pen_icon

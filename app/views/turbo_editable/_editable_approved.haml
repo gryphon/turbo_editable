@@ -2,7 +2,7 @@
   - frame_id = dom_id(model, "#{field}_frame")
   - frame_to_reload_after_update = local_assigns[:frame_to_update].nil? ? frame_id : local_assigns[:frame_to_update]
 
-  = form_with model: model, class: "editable", data: { turbo_frame: frame_to_reload_after_update } do |f|
+  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_to_reload_after_update } do |f|
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, class: "editor" do
       %span.value-container

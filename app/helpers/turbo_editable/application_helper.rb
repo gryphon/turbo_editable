@@ -57,15 +57,11 @@ module TurboEditable
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
       params[:disabled] = !ActiveModel::Type::Boolean.new.cast(params[:if]) if !params[:if].nil?
 
-      if params[:url].nil? && !namespace.nil?
+      if params[:url].nil?
         params[:url] = [namespace, model].flatten
       end
 
       params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
-
-      if params[:url].nil? && !namespace.nil?
-        params[:url] = [namespace, model]
-      end
 
       render "turbo_editable/editable_boolean", model: model, field: field, **params do
         yield
@@ -79,15 +75,13 @@ module TurboEditable
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
       params[:disabled] = !ActiveModel::Type::Boolean.new.cast(params[:if]) if !params[:if].nil?
 
-      if params[:url].nil? && !namespace.nil?
+      if params[:url].nil?
         params[:url] = [namespace, model].flatten
       end
 
       params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
 
-      if params[:url].nil? && !namespace.nil?
-        params[:url] = [namespace, model]
-      end
+      model = model.last if model.kind_of?(Array)
 
       render "turbo_editable/editable_approved", model: model, field: field, **params do
         yield
