@@ -72,3 +72,9 @@ If you have inherited resource you have to pass both objects as your model:
       = @airport.name
 
 Currently editable supports only one namespace and one inheritance levels.
+
+## Testing edit views
+
+If you want to show all editable fields in your edit form, add ```editable=true``` get param to your visit request.
+
+You can also show specific editable field by adding ```editable=field_name``` to get param

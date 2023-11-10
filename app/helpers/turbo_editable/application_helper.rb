@@ -27,7 +27,7 @@ module TurboEditable
         params[:url] = [namespace, model].flatten
       end
 
-      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
+      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
 
       model = model.last if model.kind_of?(Array)
 
@@ -61,7 +61,7 @@ module TurboEditable
         params[:url] = [namespace, model].flatten
       end
 
-      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
+      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
 
       render "turbo_editable/editable_boolean", model: model, field: field, **params do
         yield
@@ -79,7 +79,7 @@ module TurboEditable
         params[:url] = [namespace, model].flatten
       end
 
-      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: true].flatten if params[:edit_url].nil?
+      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
 
       model = model.last if model.kind_of?(Array)
 

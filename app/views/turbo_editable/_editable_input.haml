@@ -1,4 +1,4 @@
-- if params[:editable]
+- if params[:editable].to_s == field.to_s
   - did = dom_id(model, "#{field}_frame")
   = turbo_frame_tag did do
     .editor-component
@@ -26,5 +26,9 @@
       }
 - else
   - visible = local_assigns[:always_visible] || !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
+  - if params[:editable].to_s == "true" || params[:editable].to_s == "1"
+    - visible = true
+  - elsif !params[:editable].nil? && params[:editable].to_s != field
+    - visible = false
   - if visible
     = yield

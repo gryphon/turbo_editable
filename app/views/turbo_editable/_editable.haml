@@ -3,7 +3,7 @@
   - frame_to_reload_after_update = local_assigns[:frame_to_update].nil? ? frame_id : local_assigns[:frame_to_update]
 
   = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_to_reload_after_update, controller: "editable" } do |f|
-    = hidden_field_tag :editable, true  
+    = hidden_field_tag :editable, field  
     = turbo_frame_tag frame_id, src: (local_assigns[:instant_edit] ? local_assigns[:edit_url] : nil), class: "editor" do
       %span.value-container{ondblclick: "this.querySelector('.pencil').click()"}
         %span.value
