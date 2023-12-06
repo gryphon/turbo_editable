@@ -27,7 +27,13 @@ module TurboEditable
         params[:url] = [namespace, model].flatten
       end
 
-      params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
+      if params[:edit_url].nil?
+        params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten
+      else
+        if !params[:edit_url].to_s.include?("editable=")
+          params[:edit_url] = params[:edit_url].to_s.include?("?") ? params[:edit_url].to_s+"&editable=#{field}" : params[:edit_url].to_s+"?editable=#{field}"
+        end
+      end
 
       model = model.last if model.kind_of?(Array)
 
