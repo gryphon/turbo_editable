@@ -47,7 +47,9 @@ module TurboEditable
 
       inst = model.kind_of?(Array) ? model.last : model
 
-      if params[:type] == "boolean" || !inst.class.columns.find{|f| f.name.to_s == field.to_s && f.type.to_s == "boolean"}.nil?
+      params[:type] = "boolean" if params[:type].nil? && !inst.class.columns.find{|f| f.name.to_s == field.to_s && f.type.to_s == "boolean"}.nil?
+
+      if params[:type] == "boolean"
         return editable_boolean(model, field) { yield }
       end
       if params[:type] == "approved"
