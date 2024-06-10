@@ -1,32 +1,56 @@
 - if [field.to_s, "true", "1"].include?(params[:editable].to_s)
+  -# Mode when editable editor called
   - did = dom_id(model, "#{field}_frame")
   = turbo_frame_tag did do
     .editor-component
       = yield
       = editable_validation_errors model, field
-    .editor-options
-      %button{type: :submit, class: "btn btn-primary btn-sm"}
-        = editable_check_icon
-      = link_to local_assigns[:cancel_url], class: "btn btn-danger btn-sm" do
+    - if params[:mode] == "full"
+      %button{type: :submit, class: "btn btn-primary"}
+        = editable_save_icon
+        = t("save")
+      = link_to local_assigns[:cancel_url], class: "btn btn-danger" do
         = editable_x_icon
-    :javascript
-      var e = document.querySelectorAll("##{did} input")[0]
-      if (e) {
-        e.focus();
-        e.select();
-        e.dataset.flatpickrOpenedValue = "true"
-      }
-      e = document.querySelectorAll("##{did} select")[0]
-      if (e) {
-        e.focus();
-      }
-      e = document.querySelectorAll("##{did} [data-controller='autocomplete']")[0]
-      if (e) {
-        e.dataset.autocompleteOpenedValue = "true"
-      }
-- else
+        = t("cancel")
+    - else
+      .editor-options
+        %button{type: :submit, class: (TurboEditable.configuration.mode == :modern ? ["btn btn-link text-success px-1 py-0"] : ["btn btn-primary btn-sm"])}
+          = editable_save_icon
+        = link_to local_assigns[:cancel_url], class: (TurboEditable.configuration.mode == :modern ? ["btn btn-link text-danger px-1 py-0"] : ["btn btn-danger btn-sm"]) do
+          = editable_x_icon
+    - if params[:mode] != "full"
+      :javascript
+        var e = document.querySelectorAll("##{did} input")[0]
+        if (e) {
+          e.focus();
+          e.select();
+          e.dataset.flatpickrOpenedValue = "true"
+        }
+        e = document.querySelectorAll("##{did} select")[0]
+        if (e) {
+          e.focus();
+        }
+        e = document.querySelectorAll("##{did} [data-controller='autocomplete']")[0]
+        if (e) {
+          e.dataset.autocompleteOpenedValue = "true"
+        }
+- else  
+  -# Mode when in a standard form
   - visible = local_assigns[:always_visible] || !has_show_route?(model) || model.class.validators_on(field).map(&:class).include?(ActiveRecord::Validations::PresenceValidator)
   - if !params[:editable].nil? && params[:editable].to_s != field
     - visible = false
-  - if visible
-    = yield
+
+  - if !@batch.nil?
+    - visible = @batch.include?(field)
+
+  %div{class: (visible ? "" : "editable-optional" )}
+    - if @batch # Customer table batch editing support
+      .d-flex.w-100
+        .px-2.border-end.border-2.mb-1.me-2
+          %label
+            = check_box_tag "fields[]", field
+            = t("turbo_editable.change")
+        .flex-grow-1
+          = yield
+    - else
+      = yield

@@ -7,6 +7,11 @@ module TurboEditable
       return editable_icon("bi bi-check-lg") if TurboEditable.configuration.icons_framework == :bi
     end
 
+    def editable_save_icon
+      return editable_icon("fa fa-check") if TurboEditable.configuration.icons_framework == :fa
+      return editable_icon("bi bi-floppy") if TurboEditable.configuration.icons_framework == :bi
+    end
+
     def editable_x_icon
       return editable_icon("fa fa-times") if TurboEditable.configuration.icons_framework == :fa
       return editable_icon("bi bi-x-lg") if TurboEditable.configuration.icons_framework == :bi

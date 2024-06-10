@@ -22,6 +22,7 @@ module TurboEditable
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
       params[:disabled] = !ActiveModel::Type::Boolean.new.cast(params[:if]) if !params[:if].nil?
+      params[:mode] ||= TurboEditable.configuration.mode
 
       if params[:url].nil?
         params[:url] = [namespace, model].flatten
@@ -40,6 +41,10 @@ module TurboEditable
       render "turbo_editable/editable", model: model, field: field, **params do
         yield
       end
+    end
+
+    def editable_frame_id model, field
+      dom_id(model, "#{field}_frame")
     end
 
     # Automatically decides which editable to use
@@ -100,6 +105,19 @@ module TurboEditable
       if (e = model.errors.messages.select{|k,v| k.to_s != field.to_s}).length > 0
         content_tag(:div, e.collect{|k,v| "#{model.class.human_attribute_name(k)}: #{v.join(", ")}"}.join(", "), class: "invalid-feedback d-block")
       end
+    end
+
+    def editable_switch **params
+      if !params[:target]
+        params[:target] = ""
+      else
+        if params[:target] == "modal"
+          params[:target] = "closest('.modal-content')" 
+        else
+          params[:target] = "document.getElementById('#{params[:target]}')"
+        end
+      end
+      render "turbo_editable/editable_switch", **params
     end
 
   end

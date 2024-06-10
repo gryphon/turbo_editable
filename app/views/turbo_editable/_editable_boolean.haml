@@ -1,18 +1,23 @@
 - if !local_assigns[:disabled] && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
   - frame_id = dom_id(model, "#{field}_frame")
-  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_id } do |f|
+  = form_with model: model, url: local_assigns[:url], data: { turbo_frame: frame_id }, class: "editable-boolean" do |f|
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, class: "editor" do
       %span.value-container
-        %span.value= boolean_icon model.send(field)
-        - if !model.send(field)
-          %button{type: :submit, class: "btn btn-sm toggle-editor text-success"}
-            = f.hidden_field field, value: true
-            = editable_check_icon
+        - if TurboEditable.configuration.mode == :modern
+          .form-check.form-switch
+            = f.check_box field, role: "switch", class: "form-check-input", onchange: "this.closest('form').requestSubmit()"
         - else
-          %button{type: :submit, class: "btn btn-sm toggle-editor text-danger"}
-            = f.hidden_field field, value: false
-            = editable_x_icon
+          %span.value= boolean_icon model.send(field)
+          - if !model.send(field)
+            %button{type: :submit, class: "btn btn-sm toggle-editor text-success"}
+              = f.hidden_field field, value: true
+              = editable_check_icon
+          - else
+            %button{type: :submit, class: "btn btn-sm toggle-editor text-danger"}
+              = f.hidden_field field, value: false
+              = editable_x_icon
+
 - else
   = turbo_frame_tag frame_id, class: "editor" do
     = boolean_icon model.send(field)

@@ -1,0 +1,3 @@
+.form-check.form-switch.mb-0
+  %input#show-all-fields.form-check-input{:role => "switch", :type => "checkbox", onchange: "#{target}.classList.toggle('editable-show-all')"}
+  %label.form-check-label{:for => "show-all-fields"}= t("turbo_editable.show_all_fields")

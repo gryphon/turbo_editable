@@ -1,23 +1,34 @@
 - if !disabled && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
-  - frame_id = dom_id(model, "#{field}_frame")
+  - frame_id = editable_frame_id(model, field)
   - frame_to_reload_after_update = local_assigns[:frame_to_update].nil? ? frame_id : local_assigns[:frame_to_update]
 
-  = form_with model: model, url: local_assigns[:url], class: "editable", data: { turbo_frame: frame_to_reload_after_update, controller: "editable" } do |f|
-    = hidden_field_tag :editable, field  
+  - local_assigns[:multipart] = true if (!(model.send(field).class.to_s =~ /ActiveStorage/).nil? rescue false) 
+
+  = form_with model: model, url: local_assigns[:url], multipart: (local_assigns[:multipart] || false), class: "#{mode.to_s == 'full' ? '' : 'editable'} mode-#{mode}", data: { turbo_frame: frame_to_reload_after_update, controller: "editable autosubmit" } do |f|
+    = hidden_field_tag :editable, field
+    = hidden_field_tag :mode, local_assigns[:mode]
     = turbo_frame_tag frame_id, src: (local_assigns[:instant_edit] ? local_assigns[:edit_url] : nil), class: "editor" do
-      %span.value-container{ondblclick: "this.querySelector('.pencil').click()"}
-        %span.value
-          = yield
-        %span.toggle-editor
-          = link_to local_assigns[:edit_url], class: "pencil" do
-            = editable_pen_icon
-          - if local_assigns[:nullify]
-            - local_assigns[:nullify] = [field] if local_assigns[:nullify]===true
-            - if !model.send(local_assigns[:nullify][0]).blank?
-              %button{type: :submit, class: "btn btn-sm toggle-editor"}
-                - local_assigns[:nullify].each do |n|
-                  = f.hidden_field n, value: nil
-                = editable_trash_icon
+      - if mode.to_s == "full"
+        = yield
+      - else
+        - options = {}
+        - if mode == :pencil
+          - options["ondblclick"] = "this.querySelector('.pencil').click()"
+        - else
+          - options["onclick"] = "if(!['A', 'BUTTON'].includes(event.srcElement.tagName)) this.querySelector('.pencil').click()"
+        %span.value-container{**options}
+          %span.value
+            = yield
+          %span.toggle-editor
+            = link_to local_assigns[:edit_url], class: "pencil" do
+              = editable_pen_icon
+            - if local_assigns[:nullify]
+              - local_assigns[:nullify] = [field] if local_assigns[:nullify]===true
+              - if !model.send(local_assigns[:nullify][0]).blank?
+                %button{type: :submit, class: "btn btn-sm px-1"}
+                  - local_assigns[:nullify].each do |n|
+                    = f.hidden_field n, value: nil
+                  = editable_trash_icon
 
 - else
   = turbo_frame_tag frame_id, class: "editor" do
