@@ -1,3 +1,5 @@
+- frame_id = dom_id(model, "#{field}_frame")
+
 - if !local_assigns[:disabled] && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
   - frame_id = dom_id(model, "#{field}_frame")
   = form_with model: model, url: local_assigns[:url], data: { turbo_frame: frame_id }, class: "editable-boolean" do |f|

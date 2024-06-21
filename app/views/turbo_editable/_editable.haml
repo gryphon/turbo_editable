@@ -20,7 +20,7 @@
           %span.value
             = yield
           %span.toggle-editor
-            = link_to local_assigns[:edit_url], class: "pencil" do
+            = link_to local_assigns[:edit_url], class: "pencil px-1" do
               = editable_pen_icon
             - if local_assigns[:nullify]
               - local_assigns[:nullify] = [field] if local_assigns[:nullify]===true

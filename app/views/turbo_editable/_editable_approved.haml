@@ -1,3 +1,9 @@
+- changed_at_method = "#{field}_id_updated_at"
+- ab = model.send(field)
+- d = nil
+- if model.class.method_defined?(changed_at_method) && !ab.nil?
+  - d = model.send(changed_at_method)
+
 - if !local_assigns[:disabled] && (local_assigns[:form_action].nil? || can?(local_assigns[:form_action], model)) && can?(:update, model) && (local_assigns[:if].nil? || (local_assigns[:if] == true))
   - frame_id = dom_id(model, "#{field}_frame")
   - frame_to_reload_after_update = local_assigns[:frame_to_update].nil? ? frame_id : local_assigns[:frame_to_update]
@@ -6,8 +12,7 @@
     = hidden_field_tag :editable, true  
     = turbo_frame_tag frame_id, class: "editor" do
       %span.value-container
-        - ab = model.send(field)
-        %span.value= approved_icon ab
+        %span.value= approved_icon ab, d
         - if ab.nil?
           %button{type: :submit, class: "btn btn-sm toggle-editor toggle-approve"}
             = f.hidden_field "#{field}_id", value: current_user.id
@@ -18,5 +23,5 @@
             = t("cancel")
 - else
   = turbo_frame_tag frame_id, class: "editor" do
-    = approved_icon model.send(field)
+    = approved_icon ab, d
 
