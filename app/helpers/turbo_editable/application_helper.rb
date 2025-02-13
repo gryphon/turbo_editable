@@ -2,15 +2,15 @@ module TurboEditable
   module ApplicationHelper
 
     # This is element wrapper for form
-    def editable_input model, field, **params
+    def editable_input model, field, **options
 
-      namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
+      namespace = options[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
 
-      params[:cancel_url] = [namespace, model].flatten if params[:cancel_url].nil?
+      options[:cancel_url] = params[:cancel_url].blank? ? [namespace, model].flatten : params[:cancel_url] 
 
       model = model.last if model.kind_of?(Array)
 
-      render "turbo_editable/editable_input", model: model, field: field, **params do
+      render "turbo_editable/editable_input", model: model, field: field, **options do
         yield
       end
     end
@@ -29,11 +29,14 @@ module TurboEditable
       end
 
       if params[:edit_url].nil?
-        params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten
+        params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field, cancel_url: params[:cancel_url]].flatten
       else
-        if !params[:edit_url].to_s.include?("editable=")
-          params[:edit_url] = params[:edit_url].to_s.include?("?") ? params[:edit_url].to_s+"&editable=#{field}" : params[:edit_url].to_s+"?editable=#{field}"
-        end
+        parsed_url = URI.parse(params[:edit_url])
+        query_hash = Rack::Utils.parse_query(parsed_url.query)
+        query_hash["editable"] = field if query_hash["editable"].blank?
+        query_hash["cancel_url"] = params[:cancel_url] if query_hash["cancel_url"].blank?
+        parsed_url.query = Rack::Utils.build_query(query_hash)
+        params[:edit_url] = parsed_url.to_s
       end
 
       model = model.last if model.kind_of?(Array)
