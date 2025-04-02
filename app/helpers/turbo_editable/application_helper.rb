@@ -85,14 +85,19 @@ module TurboEditable
     end
 
     # Editable field for approved values (to pass current user approvement)
+    # Params:
+    # - form_action - action for rendering form ("edit" by default)
+    # - update_action - action for updating record ("update" by default)
+
     def editable_approved model, field, **params
 
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
       params[:disabled] = !ActiveModel::Type::Boolean.new.cast(params[:if]) if !params[:if].nil?
+      params[:update_action] ||= :update
 
       if params[:url].nil?
-        params[:url] = [namespace, model].flatten
+        params[:url] = [(params[:update_action].to_s == "update" ? nil : params[:update_action]), namespace, model].flatten      
       end
 
       params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
