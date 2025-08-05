@@ -56,6 +56,7 @@ Options:
 * ```nullify``` - set true to include additional one-click "remove" button
 * ```instant_edit``` - set true to start editing right after initialized
 * ```cancel_url``` - set to URL if you want cancel button work properly on complex pages
+* ```display``` - by default all editables are rendered with inline-block. You can set other property (inline / block)
 
 ## Cancancan integration
 

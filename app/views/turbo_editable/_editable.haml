@@ -4,7 +4,7 @@
 
   - local_assigns[:multipart] = true if (!(model.send(field).class.to_s =~ /ActiveStorage/).nil? rescue false) 
 
-  = form_with model: model, url: local_assigns[:url], multipart: (local_assigns[:multipart] || false), class: "#{mode.to_s == 'full' ? '' : 'editable'} mode-#{mode}", data: { turbo_frame: frame_to_reload_after_update, controller: "editable autosubmit" } do |f|
+  = form_with model: model, url: local_assigns[:url], multipart: (local_assigns[:multipart] || false), class: "#{mode.to_s == 'full' ? '' : "editable editable-#{local_assigns[:display]}"} mode-#{mode}", data: { turbo_frame: frame_to_reload_after_update, controller: "editable autosubmit" } do |f|
     = hidden_field_tag :editable, field
     = hidden_field_tag :mode, local_assigns[:mode]
     = turbo_frame_tag frame_id, src: (local_assigns[:instant_edit] ? local_assigns[:edit_url] : nil), class: "editor" do

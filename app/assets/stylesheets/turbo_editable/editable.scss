@@ -12,6 +12,18 @@
   }
 }
 
+.editable-block {
+  display: block;
+}
+
+.editable-inline-block {
+  display: inline-block; // Because we need all editable elements to be inline by default
+}
+
+.editable-inline {
+  display: inline; // Because we need all editable elements to be inline by default
+}
+
 .editable {
   margin-top: -2px;
   margin-left: -4px;
@@ -30,8 +42,6 @@
       padding: 4px 7px 4px 7px;
     }
   }
-
-  display: inline-block;
 
   // a.pencil {
   //   i {

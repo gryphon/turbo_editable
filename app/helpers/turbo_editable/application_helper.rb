@@ -28,6 +28,8 @@ module TurboEditable
         params[:url] = [namespace, model].flatten
       end
 
+      params[:display] = "inline-block" if params[:display].nil?
+
       if params[:edit_url].nil?
         params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field, cancel_url: params[:cancel_url]].flatten
       else
