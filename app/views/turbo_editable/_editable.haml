@@ -25,7 +25,7 @@
             - if local_assigns[:nullify]
               - local_assigns[:nullify] = [field] if local_assigns[:nullify]===true
               - if !model.send(local_assigns[:nullify][0]).blank?
-                %button{type: :submit, class: "btn btn-sm px-1"}
+                %button{type: :submit, class: "btn btn-sm px-1 editable-nullify"}
                   - local_assigns[:nullify].each do |n|
                     = f.hidden_field n, value: nil
                   = editable_trash_icon

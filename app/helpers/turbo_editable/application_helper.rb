@@ -2,7 +2,7 @@ module TurboEditable
   module ApplicationHelper
 
     # This is element wrapper for form
-    def editable_input model, field, **options
+    def editable_input model, field, **options, &block
 
       namespace = options[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
 
@@ -10,9 +10,7 @@ module TurboEditable
 
       model = model.last if model.kind_of?(Array)
 
-      render "turbo_editable/editable_input", model: model, field: field, **options do
-        yield
-      end
+      render "turbo_editable/editable_input", model: model, field: field, **options, &block
     end
 
     # Generic editable field. Suitable for any type
