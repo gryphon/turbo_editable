@@ -30,6 +30,10 @@
   margin-right: -4px;
   margin-bottom: -2px;
 
+  &.mode-custom {
+    margin: 0;
+  }
+
   &.mode-modern {
     margin-top: -4px;
     margin-left: -8px;

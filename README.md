@@ -75,6 +75,21 @@ If you have inherited resource you have to pass both objects as your model:
 
 Currently editable supports only one namespace and one inheritance levels.
 
+## Custom editable field and form element
+
+You can pass `custom` as `mode` parameter in editor and it will render view 
+without any controls. Include edit button by yourself like this:
+
+    = editable @country, :airports, mode: "custom" do
+      ...
+      = link_to "Edit", [:edit, @country, editable: "airports", mode: "custom"], data: {"turbo-frame": editable_frame_id(@country, "airports")}
+
+In the editable form view, you can use full-size save and cancel buttons from this helper:
+
+      = custom_editable_buttons
+
+
+
 ## Testing edit views
 
 If you want to show all editable fields in your edit form, add ```editable=true``` get param to your visit request.

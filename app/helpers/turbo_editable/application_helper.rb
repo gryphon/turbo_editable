@@ -4,17 +4,23 @@ module TurboEditable
     # This is element wrapper for form
     def editable_input model, field, **options, &block
 
+      content = capture(&block)
+
       namespace = options[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
 
       options[:cancel_url] = params[:cancel_url].blank? ? [namespace, model].flatten : params[:cancel_url] 
 
       model = model.last if model.kind_of?(Array)
 
-      render "turbo_editable/editable_input", model: model, field: field, **options, &block
+      render "turbo_editable/editable_input", model: model, field: field, **options do
+        content
+      end
     end
 
     # Generic editable field. Suitable for any type
-    def editable_field model, field, **params
+    def editable_field model, field, **params, &block
+
+      content = capture(&block)
 
       # params[:url] = root_path
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
@@ -42,7 +48,7 @@ module TurboEditable
       model = model.last if model.kind_of?(Array)
 
       render "turbo_editable/editable", model: model, field: field, **params do
-        yield
+        content
       end
     end
 
@@ -51,23 +57,27 @@ module TurboEditable
     end
 
     # Automatically decides which editable to use
-    def editable model, field, **params
+    def editable model, field, **params, &block
+
+      content = capture(&block)
 
       inst = model.kind_of?(Array) ? model.last : model
 
       params[:type] = "boolean" if params[:type].nil? && !inst.class.columns.find{|f| f.name.to_s == field.to_s && f.type.to_s == "boolean"}.nil?
 
       if params[:type] == "boolean"
-        return editable_boolean(model, field, **params) { yield }
+        return editable_boolean(model, field, **params) { content }
       end
       if params[:type] == "approved"
-        return editable_approved(model, field, **params) { yield }
+        return editable_approved(model, field, **params) { content }
       end
-      return editable_field(model, field, **params) { yield }
+      return editable_field(model, field, **params) { content }
     end
 
     # Editable field for boolean values ("Switch")
-    def editable_boolean model, field, **params
+    def editable_boolean model, field, **params, &block
+
+      content = capture(&block)
 
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
@@ -80,7 +90,7 @@ module TurboEditable
       params[:edit_url] = [params[:form_action].presence || :edit, namespace, model, editable: field].flatten if params[:edit_url].nil?
 
       render "turbo_editable/editable_boolean", model: model, field: field, **params do
-        yield
+        content
       end
     end
 
@@ -89,7 +99,9 @@ module TurboEditable
     # - form_action - action for rendering form ("edit" by default)
     # - update_action - action for updating record ("update" by default)
 
-    def editable_approved model, field, **params
+    def editable_approved model, field, **params, &block
+
+      content = capture(&block) if block_given?
 
       namespace = params[:namespace] || (controller.class.module_parent == Object) ? nil : controller.class.module_parent.to_s.underscore.to_sym
       params[:disabled] = ActiveModel::Type::Boolean.new.cast(params[:disabled])
@@ -105,7 +117,7 @@ module TurboEditable
       model = model.last if model.kind_of?(Array)
 
       render "turbo_editable/editable_approved", model: model, field: field, **params do
-        yield
+        content if block_given?
       end
     end
 
@@ -126,6 +138,12 @@ module TurboEditable
         end
       end
       render "turbo_editable/editable_switch", **params
+    end
+
+    def custom_editable_buttons
+      if !params[:editable].blank?
+        render "turbo_editable/custom_editable_buttons"
+      end
     end
 
   end

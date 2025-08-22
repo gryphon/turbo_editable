@@ -5,21 +5,15 @@
     .editor-component
       = yield
       = editable_validation_errors model, field
-    - if params[:mode] == "full"
-      .editor-full-buttons
-        %button{type: :submit, class: "btn btn-primary text-decoration-none"}
-          = editable_save_icon
-          = t("save")
-        = link_to local_assigns[:cancel_url], class: "btn btn-danger text-decoration-none" do
-          = editable_x_icon
-          = t("cancel")
+    - if params[:mode] == "custom"
+      -# hooi
     - else
       .editor-options
         %button{type: :submit, class: (TurboEditable.configuration.mode == :modern ? ["btn btn-link text-success px-0 py-0 text-decoration-none"] : ["btn btn-primary btn-sm"])}
           = editable_save_icon
         = link_to local_assigns[:cancel_url], class: (TurboEditable.configuration.mode == :modern ? ["btn btn-link text-danger px-0 py-0 text-decoration-none"] : ["btn btn-danger btn-sm"]) do
           = editable_x_icon
-    - if params[:mode] != "full"
+    - if params[:mode] != "custom"
       :javascript
         var e = document.querySelectorAll("##{did} input")[0]
         if (e) {

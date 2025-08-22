@@ -8,7 +8,7 @@
     = hidden_field_tag :editable, field
     = hidden_field_tag :mode, local_assigns[:mode]
     = turbo_frame_tag frame_id, src: (local_assigns[:instant_edit] ? local_assigns[:edit_url] : nil), class: "editor" do
-      - if mode.to_s == "full"
+      - if mode.to_s == "custom"
         = yield
       - else
         - options = {}

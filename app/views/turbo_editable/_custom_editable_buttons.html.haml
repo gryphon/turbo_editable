@@ -1,0 +1,6 @@
+%button{type: :submit, class: "btn btn-outline-success text-decoration-none"}
+  = editable_save_icon
+  = t("save")
+%button{onclick: 'document.body.insertAdjacentHTML("beforeend", `<turbo-stream action="refresh"></turbo-stream>`', class: "btn btn-outline-danger text-decoration-none"}
+  = editable_x_icon
+  = t("cancel")
